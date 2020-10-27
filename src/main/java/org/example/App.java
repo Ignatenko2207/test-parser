@@ -12,7 +12,13 @@ public class App
     public static void main( String[] args )
     {
         ParserLauncher parser = new AllegroParser();
-        parser.setMaxProducts(3);
+        // TODO: set items max amount
+        if (args.length > 0) {
+            parser.setMaxProducts(Integer.parseInt(args[0]));
+        } else {
+            parser.setMaxProducts(3);
+        }
+
         List<Item> items = parser.parse("pl");
 
 
