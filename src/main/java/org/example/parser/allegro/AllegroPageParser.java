@@ -42,8 +42,8 @@ public class AllegroPageParser extends AllegroParser implements PageParser {
     }
 
     @Override
-    public Item extractProductPage(String href) {
-        Document document = loadPage(href);
+    public Item extractProductPage(String itemUrl, Map externalData) {
+        Document document = loadPage(itemUrl);
         // TODO: implement
         String id = document.select("meta[itemProp=sku]").attr("content");
         String name = document.select("div[data-role=app-container] h1").first().text();
@@ -51,6 +51,9 @@ public class AllegroPageParser extends AllegroParser implements PageParser {
         Item item = Item.builder()
                 .id(id)
                 .name(name)
+                .url(itemUrl)
+                .category((String) externalData.get("category"))
+                .subCategory((String) externalData.get("subCategory"))
                 .build();
         return item;
     }

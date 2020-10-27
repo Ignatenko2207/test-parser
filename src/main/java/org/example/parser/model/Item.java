@@ -15,6 +15,9 @@ public class Item {
     private Double price;
     private Double initPrice;
     private String currency;
+    private String category;
+    private String subCategory;
+    private String url;
 
     @Override
     public String toString() {
@@ -25,6 +28,9 @@ public class Item {
                 priceRow + "," +
                 price + "," +
                 initPrice + "," +
-                currency + "\n";
+                currency + "," +
+                url + "," +
+                category + "," +
+                subCategory + "\n";
     }
 }

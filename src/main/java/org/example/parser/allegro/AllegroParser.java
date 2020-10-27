@@ -1,16 +1,14 @@
 package org.example.parser.allegro;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.example.parser.ParserLauncher;
 import org.example.parser.model.Item;
-import org.example.parser.service.FileService;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -38,8 +36,8 @@ public class AllegroParser extends ParserLauncher {
                     (int)(Math.random()*subcategories.size())
             };
             for (Integer index: randomindexes) {
-                Element subcategory = subcategories.get(index);
-                String nextUrl = subcategory.absUrl("href");
+                Element subCategory = subcategories.get(index);
+                String nextUrl = subCategory.absUrl("href");
                 int extractedProducts = 0;
                 while (nonNull(nextUrl)) {
                     Document listingPage = loadPage(nextUrl);
@@ -58,7 +56,11 @@ public class AllegroParser extends ParserLauncher {
                             LOGGER.info("Parser processing was interrupted!");
                             return items;
                         }
-                        Item item = allegroPageParser.extractProductPage(itemElement.absUrl("href"));
+                        Map<String, String> externalData = Map.of(
+                                "category", group.text(),
+                                "subCategory", subCategory.text()
+                        );
+                        Item item = allegroPageParser.extractProductPage(itemElement.absUrl("href"), externalData);
                         if (nonNull(item.getId())) {
                             items.add(item);
                             extractedProducts++;
