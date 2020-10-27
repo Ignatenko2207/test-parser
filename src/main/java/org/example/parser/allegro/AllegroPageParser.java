@@ -1,6 +1,7 @@
 package org.example.parser.allegro;
 
-import org.example.parser.MainPageParser;
+import org.example.parser.PageParser;
+import org.example.parser.model.Item;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -9,7 +10,7 @@ import java.util.logging.Logger;
 
 import static java.util.Objects.isNull;
 
-public class AllegroPageParser extends AllegroParser implements MainPageParser {
+public class AllegroPageParser extends AllegroParser implements PageParser {
 
     private static final Logger LOGGER = Logger.getLogger(AllegroPageParser.class.getName());
 
@@ -38,6 +39,20 @@ public class AllegroPageParser extends AllegroParser implements MainPageParser {
     public Elements extractSubcategories(String groupUrl) {
         Document document = loadPage(groupUrl);
         return document.select("div*.opbox-sheet div[data-box-name*=all_category]>div[class$=js-navigation-links]>ul>li>a._w7z6o");
+    }
+
+    @Override
+    public Item extractProductPage(String href) {
+        Document document = loadPage(href);
+        // TODO: implement
+        String id = document.select("meta[itemProp=sku]").attr("content");
+        String name = document.select("div[data-role=app-container] h1").first().text();
+        // and so on...
+        Item item = Item.builder()
+                .id(id)
+                .name(name)
+                .build();
+        return item;
     }
 
 }
